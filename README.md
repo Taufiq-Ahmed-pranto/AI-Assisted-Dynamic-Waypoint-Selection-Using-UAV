@@ -32,6 +32,21 @@ The dataset used in this project is coolected from various open scources platfro
 - **Categories**: Fire, Smoke, Person, Animals
 
 The dataset is divided into separate folders for training and validation. Images are annotated to facilitate training of the object detection model.
+The dataset I have used:
+1.	Fire data:
+https://universe.roboflow.com/master-candidate/forest-fire-and-smoke-rf4pd
+
+https://universe.roboflow.com/ai-faogz/fire-and-smoke-detection-9boih/browse?queryText=&pageSize=50&startingIndex=150&browseQuery=truehttps://universe.roboflow.com/school-tvtyg/firedetection-xxwxc
+2.	Human data:
+https://universe.roboflow.com/monash-university-sluul/yolov8-y2l6b
+https://universe.roboflow.com/saus/saus
+
+https://universe.roboflow.com/university-of-engineering-and-technology-huotg/sar_custom_drone/dataset/10
+https://universe.roboflow.com/ssb/ssb_sakarya
+https://universe.roboflow.com/diplomatic/merged-thesis
+3.	Animal:
+https://universe.roboflow.com/shenkar-1d8w5/cownt wild dataset
+
 
 ## Implementation
 
