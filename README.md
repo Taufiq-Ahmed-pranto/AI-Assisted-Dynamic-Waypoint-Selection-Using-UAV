@@ -14,7 +14,6 @@ This repository contains the code and dataset for the project "AI-Assisted Dynam
 - [Future Work](#future-work)
 - [How to Run](#how-to-run)
 - [Contributors](#contributors)
-- [License](#license)
 
 ## Project Overview
 
