@@ -1,95 +1,131 @@
-# AI-Assisted Dynamic Waypoint Selection Using UAV
+Here's a refined version of the Git documentation for your project, "AI-Assisted Dynamic Waypoint Selection Using UAV":
 
-This repository contains the code and dataset for the project "AI-Assisted Dynamic Waypoint Selection Using UAV." The project's primary goal is to develop a system using Unmanned Aerial Vehicles (UAVs) to search forest areas for fire, smoke, human beings, and animals. The project leverages AI inference on edge devices, which are powered by solar harvesting batteries.
+---
 
-## Table of Contents
+# **AI-Assisted Dynamic Waypoint Selection Using UAV**
 
-- [Project Overview](#project-overview)
-- [Dataset](#dataset)
-- [Implementation](#implementation)
-  - [UAV Path Planning](#uav-path-planning)
-  - [Object Detection Model](#object-detection-model)
-  - [Model Optimization](#model-optimization)
-- [Results](#results)
-- [Future Work](#future-work)
-- [How to Run](#how-to-run)
-- [Contributors](#contributors)
+## **Table of Contents**
+1. [Project Overview](#project-overview)
+2. [Dataset](#dataset)
+3. [Implementation](#implementation)
+   - [UAV Path Planning](#uav-path-planning)
+   - [Object Detection Model](#object-detection-model)
+   - [Model Optimization](#model-optimization)
+4. [Results](#results)
+5. [Future Work](#future-work)
+6. [How to Run](#how-to-run)
+7. [Contributors](#contributors)
 
-## Project Overview
+## **Project Overview**
+The **AI-Assisted Dynamic Waypoint Selection Using UAV** project aims to develop an efficient UAV-based system to search forest areas and detect fire, smoke, humans, and animals using AI-driven inference on edge devices powered by solar-harvested batteries. 
 
-The project is focused on developing a UAV-based system that efficiently detects fires, smoke, humans, and animals in forest areas. The UAVs are guided using Bayesian probability-based path planning, and the object detection is handled by a YOLOv8 model optimized for edge devices.
+Key Objectives:
+- **UAV Path Planning**: Utilize Bayesian probability to guide UAVs through a grid-based search area to maximize the likelihood of detecting rescue zones.
+- **Object Detection**: Implement a lightweight YOLOv8 model optimized for deployment on edge devices to detect small objects with high accuracy.
+- **Model Optimization**: Reduce the model size for compatibility with edge devices while maintaining strong performance on object detection tasks.
 
-### Key Objectives:
-- **UAV Path Planning**: Divide the search area into grids and guide the UAV based on the probability of encountering a rescue zone.
-- **Detection Model**: Implement and optimize a lightweight YOLOv8 model to run efficiently on edge devices.
-- **Optimization**: Reduce the model size to fit edge device constraints while maintaining high accuracy in detecting small objects.
+---
 
-## Dataset
+## **Dataset**
+The dataset comprises aerial view images annotated for object detection, divided into categories of **Fire**, **Smoke**, **Person**, and **Animals**. The dataset has been sourced from multiple open platforms and split into training and validation sets:
 
-The dataset used in this project is coolected from various open scources platfrom and consists of:
-- **Training Data**: 70,000 aerial view images
+- **Training Data**: 70,000 images
 - **Validation Data**: 8,000 images
-- **Categories**: Fire, Smoke, Person, Animals
 
-The dataset is divided into separate folders for training and validation. Images are annotated to facilitate training of the object detection model.
-The dataset I have used:
-1.	Fire data:
-https://universe.roboflow.com/master-candidate/forest-fire-and-smoke-rf4pd
+### **Dataset Sources**:
+- **Fire Detection**: 
+  - [Fire and Smoke Detection - RoboFlow](https://universe.roboflow.com/master-candidate/forest-fire-and-smoke-rf4pd)
+  - [Fire and Smoke Detection - Browse](https://universe.roboflow.com/ai-faogz/fire-and-smoke-detection-9boih/browse?queryText=&pageSize=50&startingIndex=150&browseQuery=true)
+- **Human Detection**:
+  - [Human Detection - RoboFlow](https://universe.roboflow.com/monash-university-sluul/yolov8-y2l6b)
+  - [SAR Custom Drone Dataset](https://universe.roboflow.com/university-of-engineering-and-technology-huotg/sar_custom_drone/dataset/10)
+- **Animal Detection**:
+  - [Wild Animal Detection - RoboFlow](https://universe.roboflow.com/shenkar-1d8w5/cownt-wild-dataset)
 
-https://universe.roboflow.com/ai-faogz/fire-and-smoke-detection-9boih/browse?queryText=&pageSize=50&startingIndex=150&browseQuery=truehttps://universe.roboflow.com/school-tvtyg/firedetection-xxwxc
-2.	Human data:
-https://universe.roboflow.com/monash-university-sluul/yolov8-y2l6b
-https://universe.roboflow.com/saus/saus
+---
 
-https://universe.roboflow.com/university-of-engineering-and-technology-huotg/sar_custom_drone/dataset/10
-https://universe.roboflow.com/ssb/ssb_sakarya
-https://universe.roboflow.com/diplomatic/merged-thesis
-3.	Animal:
-https://universe.roboflow.com/shenkar-1d8w5/cownt wild dataset
+## **Implementation**
 
+### **UAV Path Planning**
+- **Grid-based Search**: The UAV divides the forest into grids and systematically searches them using Bayesian probability. The probability of encountering specific objects such as fire, smoke, animals, or humans influences the UAV’s flight path. 
+- **Dynamic Waypoint Selection**: The UAV dynamically selects new waypoints based on real-time detection probabilities, improving search efficiency and detection rates.
 
-## Implementation
+### **Object Detection Model**
+- **YOLOv8n Architecture**: A lightweight version of YOLOv8, optimized for edge devices. Key components include:
+  - **Backbone**: CSPDarknet53, which provides efficient feature extraction.
+  - **Neck**: C2f Module, which merges features at different scales.
+  - **Head**: Detection modules that predict bounding boxes and class probabilities for the target objects (fire, smoke, humans, animals).
+  
+### **Model Optimization**
+- **Model Pruning and Quantization**: The original YOLOv8 model (6.5 MB) was optimized using techniques such as pruning and dynamic quantization to reduce the model size to **2.5 MB**. This reduction was achieved with minimal loss in accuracy, making the model suitable for edge devices with limited computational power.
 
-### UAV Path Planning
+---
 
-The UAV divides the forest into grids and navigates these grids based on Bayesian probability. The UAV marks grids with detected objects and follows an efficient search pattern to maximize coverage and detection accuracy.
+## **Results**
+After optimization, the YOLOv8 model delivered strong performance in detecting target objects. Below are the key performance metrics:
 
-### Object Detection Model
-
-The project uses a YOLOv8n model, which is lightweight and optimized for small object detection. The model architecture includes:
-- **Backbone**: CSPDarknet53 for feature extraction
-- **Neck**: C2f Module for merging features
-- **Head**: Multiple detection modules for prediction
-
-### Model Optimization
-
-The model was optimized to reduce its size from 6.5 MB to 2.5 MB, with a minimal loss in accuracy. This was achieved through gradual pruning, dynamic quantization, and fine-tuning of model parameters.
-
-## Results
-
-Post-optimization, the YOLOv8 model showed the following performance:
-- **Model Size**: Reduced from 6.5 MB to 2.5 MB
+- **Model Size**: Reduced from **6.5 MB** to **2.5 MB**
 - **Mean Average Precision (mAP50)**:
-  - Fire: 0.43
-  - Smoke: 0.59
-  - Person: 0.84
-  - Animal: 0.94
+  - Fire: **0.43**
+  - Smoke: **0.59**
+  - Person: **0.84**
+  - Animal: **0.94**
+  
+- **Inference Time**: The model runs efficiently on edge devices, demonstrating low latency during inference.
 
-### Inference Results
-- Inference on test data demonstrated effective detection of the targeted categories, even in optimized model conditions.
+---
 
-## Future Work
+## **Future Work**
+1. **Integration with Edge Devices**: Deploy the optimized YOLOv8 model on solar-powered edge devices for real-time UAV-based object detection.
+2. **Continuous Operation**: Develop a solar-powered system that ensures uninterrupted UAV operation in forest environments.
+3. **Rescue Pipeline**: Implement a priority-based rescue pipeline, prioritizing responses based on detected objects (e.g., humans are prioritized over animals).
 
-- **Integration with Edge Devices**: Deploy the optimized model on edge devices for real-time inference.
-- **Solar-Powered System**: Develop a solar-powered system to support continuous UAV operations.
-- **Priority-Based Rescue Pipeline**: Implement a detection pipeline to prioritize rescues based on the detected objects.
+---
 
-## How to Run
+## **How to Run**
+To run this project, you need access to the dataset and the optimized YOLOv8 model. Due to the sensitive nature of this project, we are happy to share the dataset and code for research purposes. Please contact **Taufiq Ahmed** at **taufiqahmed806@gmail.com** for access.
 
-To run the project, if you send email at taufiqahmed806@gmail.com , we will be happy to share our work for the research purpose.
+### **Setting Up the Environment**
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/yourusername/uav-ai-waypoint-selection.git
+   cd uav-ai-waypoint-selection
+   ```
 
-## Contributors
+2. **Create Conda Environment**:
+   Make sure you have Conda installed. Then, create and activate the environment:
+   ```bash
+   conda create -n yolov8_env python=3.12
+   conda activate yolov8_env
+   ```
 
-- **Taufiq Ahmed**
-- **Abhishek Kumar**
+3. **Install Dependencies**:
+   Install the required dependencies including the YOLOv8 library:
+   ```bash
+   pip install ultralytics
+   ```
 
+4. **Prepare the Dataset**:
+   - Download the dataset from the provided links and structure it as follows:
+     ```bash
+     data/
+     ├── images/
+     ├── labels/
+     └── data.yaml  # The dataset configuration file.
+     ```
+   
+5. **Run YOLOv8 Training**:
+   Execute the training script on your local machine or an HPC system:
+   ```bash
+   yolo task=detect mode=train model=yolov8n.pt data=data.yaml epochs=100 imgsz=1024
+   ```
+
+---
+
+## **Contributors**
+- **Taufiq Ahmed** 
+- **Abhishek Kumar** 
+
+For any questions or contributions, please open an issue or reach out to the contributors.
+
+---
