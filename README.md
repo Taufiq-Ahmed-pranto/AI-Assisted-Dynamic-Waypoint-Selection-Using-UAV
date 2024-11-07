@@ -1,7 +1,3 @@
-Here's a refined version of the Git documentation for your project, "AI-Assisted Dynamic Waypoint Selection Using UAV":
-
----
-
 # **AI-Assisted Dynamic Waypoint Selection Using UAV**
 
 ## **Table of Contents**
