@@ -72,7 +72,7 @@ Addressing data imbalance was critical to ensuring reliable object detection acr
   - **Instance-Aware Rebalancing**: Integrated techniques from cutting-edge research ([Instance-Aware Sampling](https://arxiv.org/abs/2305.08069)) to improve performance.
 
 - **Current Metrics:**
-  - **Model Size**: Reduced from 6.5 MB to **<1 MB**.
+  - **Model Size**: Reduced from 6.5 MB to **<2.5 MB**.
   - **mAP50 Performance**:
     - Fire: 0.26
     - Smoke: 0.73
