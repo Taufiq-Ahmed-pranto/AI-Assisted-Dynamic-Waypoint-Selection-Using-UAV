@@ -1,127 +1,181 @@
-# **AI-Assisted Dynamic Waypoint Selection Using UAV**
+# **AI-Assisted UAV Path Planning for Rescue Operations**
 
 ## **Table of Contents**
 1. [Project Overview](#project-overview)
-2. [Dataset](#dataset)
-3. [Implementation](#implementation)
-   - [UAV Path Planning](#uav-path-planning)
-   - [Object Detection Model](#object-detection-model)
+2. [Data Engineering and AI](#data-engineering-and-ai)
+   - [Dataset Overview](#dataset-overview)
+   - [Data Imbalance and Augmentation](#data-imbalance-and-augmentation)
    - [Model Optimization](#model-optimization)
+3. [UAV Path Planning](#uav-path-planning)
+   - [Dynamic Waypoint Selection](#dynamic-waypoint-selection)
+   - [Algorithm Integration](#algorithm-integration)
 4. [Results](#results)
+   - [Performance Metrics](#performance-metrics)
+   - [Ablation Studies](#ablation-studies)
 5. [Future Work](#future-work)
 6. [How to Run](#how-to-run)
 7. [Contributors](#contributors)
 
+---
+
 ## **Project Overview**
-The **AI-Assisted Dynamic Waypoint Selection Using UAV** project aims to develop an efficient UAV-based system to search forest areas and detect fire, smoke, humans, and animals using AI-driven inference on edge devices powered by solar-harvested batteries. 
+The **AI-Assisted UAV Path Planning for Rescue Operations** project leverages advanced AI techniques to develop an efficient UAV-based system for large-scale forest rescue missions. The system detects fire, smoke, humans, and animals in challenging environments using lightweight AI models optimized for edge devices. This includes implementing robust data engineering practices and deploying AI models on solar-powered UAVs for continuous operation.
 
 Key Objectives:
-- **UAV Path Planning**: Utilize Bayesian probability to guide UAVs through a grid-based search area to maximize the likelihood of detecting rescue zones.
-- **Object Detection**: Implement a lightweight YOLOv8 model optimized for deployment on edge devices to detect small objects with high accuracy.
-- **Model Optimization**: Reduce the model size for compatibility with edge devices while maintaining strong performance on object detection tasks.
+- **Data Engineering**: Develop a diverse and balanced dataset to improve detection accuracy for fire, smoke, humans, and animals.
+- **AI Optimization**: Use advanced model pruning, quantization, and rebalancing techniques to create lightweight, high-performance models.
+- **UAV Path Planning**: Implement dynamic waypoint selection and obstacle avoidance algorithms to optimize UAV navigation and efficiency.
 
 ---
 
-## **Dataset**
-The dataset comprises aerial view images annotated for object detection, divided into categories of **Fire**, **Smoke**, **Person**, and **Animals**. The dataset has been sourced from multiple open platforms and split into training and validation sets:
+## **Data Engineering and AI**
 
-- **Training Data**: 70,000 images
-- **Validation Data**: 8,000 images
+### **Dataset Overview**
+The dataset combines multiple sources to ensure broad coverage of target objects. It includes aerial images of **fire**, **smoke**, **humans**, **animals**, and **lakes**, with a focus on real-world scenarios.
 
-### **Dataset Sources**:
-- **Fire Detection**: 
-  - [Fire and Smoke Detection - RoboFlow](https://universe.roboflow.com/master-candidate/forest-fire-and-smoke-rf4pd)
-  - [Fire and Smoke Detection - Browse](https://universe.roboflow.com/ai-faogz/fire-and-smoke-detection-9boih/browse?queryText=&pageSize=50&startingIndex=150&browseQuery=true)
-- **Human Detection**:
-  - [Human Detection - RoboFlow](https://universe.roboflow.com/monash-university-sluul/yolov8-y2l6b)
-  - [SAR Custom Drone Dataset](https://universe.roboflow.com/university-of-engineering-and-technology-huotg/sar_custom_drone/dataset/10)
-- **Animal Detection**:
-  - [Wild Animal Detection - RoboFlow](https://universe.roboflow.com/shenkar-1d8w5/cownt-wild-dataset)
+- **Sources**: Fire and smoke detection datasets from RoboFlow, SAR datasets for human detection, and custom datasets generated during summer internships.
+- **Current Dataset Statistics**:
+  - **Smoke**: 28,769 files
+  - **Fire**: 16,915 files
+  - **Humans**: 18,525 files
+  - **Lake**: 12,646 files
+
+**Key Enhancements:**
+1. Generated high-altitude test datasets and applied advanced annotation techniques.
+2. Integrated fireman datasets into a custom YOLO-format dataset.
+3. Applied AI tools to convert standard datasets into aerial views for improved relevance.
 
 ---
 
-## **Implementation**
+### **Data Imbalance and Augmentation**
 
-### **UAV Path Planning**
-- **Grid-based Search**: The UAV divides the forest into grids and systematically searches them using Bayesian probability. The probability of encountering specific objects such as fire, smoke, animals, or humans influences the UAV’s flight path. 
-- **Dynamic Waypoint Selection**: The UAV dynamically selects new waypoints based on real-time detection probabilities, improving search efficiency and detection rates.
+Addressing data imbalance was critical to ensuring reliable object detection across all classes. The following strategies were implemented:
 
-### **Object Detection Model**
-- **YOLOv8n Architecture**: A lightweight version of YOLOv8, optimized for edge devices. Key components include:
-  - **Backbone**: CSPDarknet53, which provides efficient feature extraction.
-  - **Neck**: C2f Module, which merges features at different scales.
-  - **Head**: Detection modules that predict bounding boxes and class probabilities for the target objects (fire, smoke, humans, animals).
-  
+1. **Custom Dataloader**:
+   - Developed a custom dataloader to balance training datasets by prioritizing underrepresented classes.
+   - Integrated repeat-factor sampling techniques to address imbalance dynamically.
+
+2. **Augmentation Techniques**:
+   - Applied augmentation strategies to increase instances of underrepresented classes, including oversampling and synthetic data generation.
+   - Conducted experiments to fine-tune the augmentation strategy based on model performance.
+
+3. **Ablation Studies**:
+   - Performed detailed analyses on the effectiveness of rebalancing techniques and transfer learning.
+
+---
+
 ### **Model Optimization**
-- **Model Pruning and Quantization**: The original YOLOv8 model (6.5 MB) was optimized using techniques such as pruning and dynamic quantization to reduce the model size to **2.5 MB**. This reduction was achieved with minimal loss in accuracy, making the model suitable for edge devices with limited computational power.
+
+- **Architecture**: The lightweight YOLOv8n model was further optimized using:
+  - **Pruning**: Removed redundant parameters to reduce the model size.
+  - **Quantization**: Applied dynamic quantization to improve compatibility with edge devices.
+  - **Instance-Aware Rebalancing**: Integrated techniques from cutting-edge research ([Instance-Aware Sampling](https://arxiv.org/abs/2305.08069)) to improve performance.
+
+- **Current Metrics:**
+  - **Model Size**: Reduced from 6.5 MB to **<1 MB**.
+  - **mAP50 Performance**:
+    - Fire: 0.26
+    - Smoke: 0.73
+    - Human: 0.78
+    - Lake: 0.05
+
+---
+
+## **UAV Path Planning**
+
+### **Dynamic Waypoint Selection**
+The UAV employs AI-driven dynamic waypoint selection to maximize efficiency and coverage:
+- **Bayesian Inference**: Guides UAV navigation by estimating the probability of detecting specific objects.
+- **Dynamic Updates**: Continuously adjusts waypoints based on real-time detections.
+
+### **Algorithm Integration**
+The project integrates various algorithms to optimize UAV operations:
+1. **RRT* Algorithm**: Used for obstacle avoidance and dynamic waypoint selection.
+2. **Energy Optimization**:
+   - Minimized energy consumption during hovering.
+   - Utilized solar energy harvesting for inference tasks.
+3. **Battery and Cost Monitoring**: Integrated into path planning algorithms to ensure efficient resource utilization.
 
 ---
 
 ## **Results**
-After optimization, the YOLOv8 model delivered strong performance in detecting target objects. Below are the key performance metrics:
 
-- **Model Size**: Reduced from **6.5 MB** to **2.5 MB**
-- **Mean Average Precision (mAP50)**:
-  - Fire: **0.43**
-  - Smoke: **0.59**
-  - Person: **0.84**
-  - Animal: **0.94**
-  
-- **Inference Time**: The model runs efficiently on edge devices, demonstrating low latency during inference.
+### **Performance Metrics**
+- **Aggregated Dataset Accuracy**:
+  | Class  | mAP-50 |
+  |--------|---------|
+  | Fire   | 0.26    |
+  | Smoke  | 0.73    |
+  | Human  | 0.78    |
+  | Lake   | 0.05    |
+  | All    | 0.46    |
+
+- **Improvements**:
+  - mAP50 increased from 0.16 (fireman dataset alone) to 0.46 (aggregated dataset).
+  - Significant accuracy gains for human and smoke classes due to improved dataset quality.
+
+### **Ablation Studies**
+- Conducted experiments to evaluate rebalancing techniques, augmentation strategies, and transfer learning.
+- Established baselines for YOLOv11 Nano and Large models.
+- Results informed improvements in dataset balancing and model optimization.
 
 ---
 
 ## **Future Work**
-1. **Integration with Edge Devices**: Deploy the optimized YOLOv8 model on solar-powered edge devices for real-time UAV-based object detection.
-2. **Continuous Operation**: Develop a solar-powered system that ensures uninterrupted UAV operation in forest environments.
-3. **Rescue Pipeline**: Implement a priority-based rescue pipeline, prioritizing responses based on detected objects (e.g., humans are prioritized over animals).
+1. **Improve Detection for Underserved Classes**:
+   - Enhance datasets for fire and lake detection.
+   - Experiment with advanced augmentation techniques.
+2. **Generalization**:
+   - Train models to perform well in diverse environments (forest, city, etc.).
+3. **Model Deployment**:
+   - Deploy models on microcontroller units (MCUs) and measure energy consumption.
+   - Develop UAV-ready solar-powered inference systems.
+4. **Test Pipeline**:
+   - Validate performance on real-world videos and high-altitude datasets.
 
 ---
 
 ## **How to Run**
-To run this project, you need access to the dataset and the optimized YOLOv8 model. Due to the sensitive nature of this project, we are happy to share the dataset and code for research purposes. Please contact **Taufiq Ahmed** at **taufiqahmed806@gmail.com** for access.
 
-### **Setting Up the Environment**
+### **Prerequisites**
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/uav-ai-waypoint-selection.git
-   cd uav-ai-waypoint-selection
+   git clone https://github.com/yourusername/uav-ai-rescue.git
+   cd uav-ai-rescue
    ```
 
-2. **Create Conda Environment**:
-   Make sure you have Conda installed. Then, create and activate the environment:
-   ```bash
-   conda create -n yolov8_env python=3.12
-   conda activate yolov8_env
-   ```
+2. **Set Up the Environment**:
+   - Install Conda and create an environment:
+     ```bash
+     conda create -n uav_env python=3.12
+     conda activate uav_env
+     ```
+   - Install dependencies:
+     ```bash
+     pip install ultralytics
+     ```
 
-3. **Install Dependencies**:
-   Install the required dependencies including the YOLOv8 library:
-   ```bash
-   pip install ultralytics
-   ```
-
-4. **Prepare the Dataset**:
-   - Download the dataset from the provided links and structure it as follows:
+3. **Prepare the Dataset**:
+   - Structure the dataset as follows:
      ```bash
      data/
      ├── images/
      ├── labels/
-     └── data.yaml  # The dataset configuration file.
+     └── data.yaml
      ```
-   
-5. **Run YOLOv8 Training**:
-   Execute the training script on your local machine or an HPC system:
-   ```bash
-   yolo task=detect mode=train model=yolov8n.pt data=data.yaml epochs=100 imgsz=1024
-   ```
+
+### **Run Training**
+Execute the training script:
+```bash
+yolo task=detect mode=train model=yolov8n.pt data=data.yaml epochs=100 imgsz=1024
+```
 
 ---
 
 ## **Contributors**
-- **Taufiq Ahmed** 
-- **Abhishek Kumar** 
+- **Taufiq Ahmed**
+- **Abhishek Kumar**
 
-For any questions or contributions, please open an issue or reach out to the contributors.
+For any questions or contributions, please open an issue or contact the contributors at **taahmed23@student.oulu.fi**.
 
 ---
